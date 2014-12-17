@@ -17,24 +17,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-package 'open-iscsi' do
-  package_name 'open-iscsi'
-  action node['chef-iscsiadm']['portal'].empty? ? :nothing : :upgrade
-end
+if node['chef-iscsiadm']
 
-service 'iscsiadm' do
-  supports :status => true, :restart => false, :reload => false
-end
+  package 'open-iscsi' do
+    package_name 'open-iscsi'
+    action Array.new( node['chef-iscsiadm']['portal'] ).empty? ? :nothing : :upgrade
+  end
 
-template '/etc/init.d/iscsiadm' do
-  source 'iscsiadm.erb'
-  mode '0755'
-  owner 'root'
-  group 'root'
-  variables({
-    :date => Time.now,
-    :portal => node['chef-iscsiadm']['portal']
-  })
-  action node['chef-iscsiadm']['portal'].empty? ? :delete : :create
-  notifies :start, 'service[iscsiadm]', :immediately
+  service 'iscsiadm' do
+    supports :status => true, :restart => false, :reload => false
+  end
+
+  template '/etc/init.d/iscsiadm' do
+    source 'iscsiadm.erb'
+    mode '0755'
+    owner 'root'
+    group 'root'
+    variables({
+      :date => Time.now,
+      :portal => node['chef-iscsiadm']['portal']
+    })
+    action Array.new( node['chef-iscsiadm']['portal'] ).empty? ? :delete : :create
+    notifies :start, 'service[iscsiadm]', :immediately
+  end
+
 end
