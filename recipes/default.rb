@@ -26,6 +26,7 @@ if node['chef-iscsiadm']
 
   service 'iscsiadm' do
     supports :status => true, :restart => false, :reload => false
+    priority :S => [:start, 46], 0 => [:stop, 80], 1 => [:stop, 80], 6 => [:stop, 80]
   end
 
   template '/etc/init.d/iscsiadm' do
@@ -38,7 +39,8 @@ if node['chef-iscsiadm']
       :portal => node['chef-iscsiadm']['portal']
     })
     action Array.new( node['chef-iscsiadm']['portal'] ).empty? ? :delete : :create
-    notifies :start, 'service[iscsiadm]', :immediately
+    notifies :enable, 'service[iscsiadm]', :immediately
+    notifies :start,  'service[iscsiadm]', :immediately
   end
 
 end

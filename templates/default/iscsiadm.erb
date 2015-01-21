@@ -3,7 +3,7 @@
 ### BEGIN INIT INFO
 # Provides:        iscsiadm
 # Required-Start:  $network $remote_fs
-# Required-Stop:   $network umountiscsi.sh
+# Required-Stop:   $network $remote_fs sendsigs open-iscsi
 # Default-Start:   S
 # Default-Stop:    0 1 6
 # Short-Description: Start iscsi attachements
