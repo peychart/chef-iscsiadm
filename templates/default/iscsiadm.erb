@@ -18,14 +18,14 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 _attach() {
  [ ! -z "$1" ] || return
  local ip=$1 i j getit; shift
- for i in $(iscsiadm --mode discovery --type sendtargets --portal $ip| grep "$ip:"| cut -d' ' -f2); do
+ for i in $(iscsiadm -m discovery -t st -p $ip| grep "$ip:"| cut -d' ' -f2); do
 
   getit=1; for j in $*; do
    echo "$i"| grep -wqs "$j" && getit=1 && break
    getit=0
   done; [ $getit -ne 1 ] && continue
 
-  iscsiadm --mode node --targetname $i --portal $ip --login || break
+  iscsiadm -m node --targetname $i --portal $ip --login || break
 
  done
 }
