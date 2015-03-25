@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-if node['chef-iscsiadm']['ip']
+if node['chef-iscsiadm'] != {}
 
   package 'open-iscsi' do
     package_name 'open-iscsi'
